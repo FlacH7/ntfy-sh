@@ -1,0 +1,86 @@
+[build-system]
+requires = ["hatchling>=1.27"]
+build-backend = "hatchling.build"
+
+[project]
+name = "ntfy-sh"
+version = "1.0.0"
+description = "Zero-dependency Python client for ntfy.sh push notifications, with decorators to monitor long-running jobs."
+readme = "README.md"
+requires-python = ">=3.10"
+license = "MIT"
+license-files = ["LICENSE"]
+# NOTE: replace the placeholder email below with your real one BEFORE publishing.
+authors = [
+    { name = "FlacH7", email = "your-email@example.com" },
+]
+keywords = [
+    "ntfy",
+    "ntfy-sh",
+    "notifications",
+    "push-notifications",
+    "monitoring",
+    "long-running-jobs",
+    "zero-dependencies",
+    "ssh",
+    "cli",
+]
+classifiers = [
+    "Development Status :: 5 - Production/Stable",
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Intended Audience :: System Administrators",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Programming Language :: Python :: 3.14",
+    "Topic :: Communications",
+    "Topic :: System :: Monitoring",
+    "Topic :: Utilities",
+    "Typing :: Typed",
+]
+
+[project.urls]
+Homepage = "https://github.com/FlacH7/ntfy-sh"
+Repository = "https://github.com/FlacH7/ntfy-sh"
+Changelog = "https://github.com/FlacH7/ntfy-sh/blob/main/CHANGELOG.md"
+Issues = "https://github.com/FlacH7/ntfy-sh/issues"
+"Julia sibling" = "https://github.com/FlacH7/NtfySh.jl"
+
+[project.scripts]
+ntfy-sh = "ntfy_sh.__main__:main"
+
+[project.optional-dependencies]
+test = ["pytest>=8.0"]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/ntfy_sh"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "src/ntfy_sh",
+    "tests",
+    "examples",
+    "README.md",
+    "CHANGELOG.md",
+    "CONTRIBUTING.md",
+    "LICENSE",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "-ra"
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I", "UP", "B"]
+
+[tool.ruff.lint.per-file-ignores]
+# Example scripts are intentionally didactic, not lint-clean demos.
+"examples/*" = ["E501"]

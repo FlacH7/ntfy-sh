@@ -1,0 +1,53 @@
+name: Publish to PyPI
+
+# Trusted Publishing (OIDC): no API tokens needed.
+# One-time setup on pypi.org (see README "Publishing" section):
+#   Project settings -> "Add a new pending publisher"
+#     PyPI project name: ntfy-sh
+#     Owner: FlacH7
+#     Repository name: ntfy-sh
+#     Workflow filename: publish.yml
+#     Environment name: pypi   (create a GitHub environment with that name)
+
+on:
+  release:
+    types: [published]
+  workflow_dispatch:
+
+permissions:
+  id-token: write  # required for OIDC Trusted Publishing
+
+jobs:
+  build:
+    name: Build sdist + wheel
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v5
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.13"
+      - name: Install build tools
+        run: pip install build twine
+      - name: Build distributions
+        run: python -m build
+      - name: Check distributions with twine
+        run: twine check dist/*
+      - name: Store distributions
+        uses: actions/upload-artifact@v4
+        with:
+          name: dist
+          path: dist/
+
+  publish:
+    name: Upload to PyPI
+    needs: build
+    runs-on: ubuntu-latest
+    environment: pypi
+    steps:
+      - name: Download distributions
+        uses: actions/download-artifact@v4
+        with:
+          name: dist
+          path: dist/
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1
